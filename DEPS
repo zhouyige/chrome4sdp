@@ -30,6 +30,7 @@
 vars = {
   'chromium_git': 'git://codeaurora.org/quic/chrome4sdp',
   'webtech_devx_url': 'git://webtech-devx.qualcomm.com/swe/packages',
+  'google_git': 'https://chromium.googlesource.com/chromium',
 
   # Three lines of non-changing comments so that
   # the commit queue can handle CLs rolling sfntly
@@ -198,7 +199,7 @@ deps = {
     Var('chromium_git') + '/webm/libvpx.git' + '@' +  '5c64c01c7ca3780d30f140e54a30088f780ae66a',
 
   'src/third_party/ffmpeg':
-   https://chromium.googlesource.com/chromium/third_party/ffmpeg,
+    Var('google_git') + '/third_party/ffmpeg',
 
   'src/third_party/usrsctp/usrsctplib':
     Var('chromium_git') + '/external/github.com/sctplab/usrsctp' + '@' + '7f9228152ab3d70e6848cc9c67389a0d4218740e',
