@@ -1,0 +1,11 @@
+COMPANY_FULLNAME=The Linux Foundation
+COMPANY_SHORTNAME=The Linux Foundation
+PRODUCT_FULLNAME=Browser
+PRODUCT_SHORTNAME=Browser
+PRODUCT_INSTALLER_FULLNAME=Snapdragon Browser Installer
+PRODUCT_INSTALLER_SHORTNAME=Snapdragon Browser Installer
+COPYRIGHT=Copyright (c) 2015-2016 The Linux Foundation. All rights reserved.
+PACKAGE_NAME=com.android.browser
+APK_LABEL=@string/application_name
+APK_AUTHORITIES=browser
+APP_AUTHORITIES=local.browser

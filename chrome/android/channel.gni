@@ -1,0 +1,115 @@
+# Copyright 2014 The Chromium Authors. All rights reserved.
+# Use of this source code is governed by a BSD-style license that can be
+# found in the LICENSE file.
+
+declare_args() {
+  # Comma separated channel names. A channel can either be a path under
+  # 'swe/channels' or an absolute path. First channel passed is required
+  # to provide branding file (default branding file location can be found
+  # at swe/channels/default/branding/BRANDING)
+  swe_channels = "default"
+
+  swe_branding_path_component = ""
+  swe_prop_resources_dirs = []
+  swe_resources_zip = []
+}
+
+# WebRefiner
+exec_script("//build/web_refiner_init.py", [], "string")
+
+# LibSwenet
+exec_script("//build/libswenet_init.py", [], "string")
+
+import("//components/web_refiner/web_refiner_vars.gni")
+import("//components/libswenet/libswenet_vars.gni")
+
+if (web_refiner_resource_dirs != []) {
+  wr_res_dir = rebase_path(web_refiner_resource_dirs[0], root_build_dir)
+  wr_res_dir_exists = exec_script("//build/dir_exists.py", [ wr_res_dir ], "string") == "True"
+  if (!wr_res_dir_exists) {
+    exec_script("//build/makedirs.py", [ wr_res_dir ], "string")
+  }
+  swe_prop_resources_dirs += web_refiner_resource_dirs
+}
+
+swe_branding_path_component =  exec_script("//swe/tools/swe_channels_dirs.py",
+                [ "--swe-channels", swe_channels, "-d",
+                  rebase_path("//", root_build_dir), "--branding-folder"],
+                  "string")
+
+swe_branding_path =  exec_script("//swe/tools/swe_channels_dirs.py",
+                [ "--swe-channels", swe_channels, "-d",
+                  rebase_path("//", root_build_dir), "--branding-file-path"],
+                  "string")
+
+swe_branding_name = exec_script("//swe/tools/swe_channels_dirs.py",
+                [ "--swe-channels", swe_channels, "-d",
+                  rebase_path("//", root_build_dir), "--branding-name"],
+                  "string")
+
+swe_extra_dirs = exec_script("//swe/tools/swe_channels_dirs.py",
+                [ "--swe-channels", swe_channels, "-d",
+                  rebase_path("//", root_build_dir), "--channel-res-folder"],
+                  "list lines")
+
+swe_extra_dirs += swe_prop_resources_dirs
+
+swe_extra_dirs += ["java/res_swe",
+                   rebase_path("//swe/res", root_build_dir)]
+
+swe_manifest_package =  exec_script("//swe/tools/swe_config.py",
+                      [ "-i", rebase_path(swe_branding_path, root_build_dir), "-c", "PACKAGE_NAME"],
+                        "string")
+
+swe_version_file =  exec_script("//swe/tools/swe_version.py",
+                      [ "-i", rebase_path("//chrome/VERSION", root_build_dir),
+                        "-o", rebase_path("//swe/VERSION", root_build_dir),
+                        "-r", rebase_path("//swe/res/raw/version", root_build_dir),
+                        "-g", rebase_path("//swe/res/raw/changelog", root_build_dir),
+                        "-c", swe_channels],
+                        "string")
+
+swe_app_manifest_version_code =  exec_script("//swe/tools/swe_version.py",
+                      [ "-i", rebase_path("//chrome/VERSION", root_build_dir),
+                        "-o", rebase_path("//swe/VERSION", root_build_dir),
+                        "-c", swe_channels,
+                        "--version-code-only"],
+                        "string")
+
+swe_app_manifest_version_string =  exec_script("//swe/tools/swe_version.py",
+                      [ "-i", rebase_path("//chrome/VERSION", root_build_dir),
+                        "-o", rebase_path("//swe/VERSION", root_build_dir),
+                        "-c", swe_channels,
+                        "--version-string-only"],
+                        "string")
+
+declare_args() {
+  # The channel to build on Android: stable, beta, dev, canary, work, or
+  # default. "default" should be used on non-official builds.
+  #
+  # | swe_channel  | android_channel |
+  # |--------------|-----------------|
+  # | dev          | dev             |
+  # | masq_dev     | dev             |
+  # | beta         | beta            |
+  # | stable       | stable          |
+  # | default      | default         |
+  # | work         | stable          |
+  # | system       | stable          |
+  # | *            | stable          |
+  if ((swe_branding_name == "dev") ||
+          (swe_branding_name == "masq_dev")) {
+    android_channel = "dev"
+  } else if (swe_branding_name == "beta") {
+    android_channel = "beta"
+  } else if (swe_branding_name == "default") {
+    android_channel = "default"
+  } else {
+    android_channel = "stable"
+  }
+}
+
+assert(android_channel == "default" || android_channel == "canary" ||
+           android_channel == "dev" || android_channel == "beta" ||
+           android_channel == "stable" || android_channel == "work",
+       "Invalid channel: " + android_channel)

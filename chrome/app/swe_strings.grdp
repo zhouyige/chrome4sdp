@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--  SWE strings -->
+<grit-part>
+   <!-- XSS Interstitial V1 -->
+      <message name="IDS_XSS_V1_PROCEED_PARAGRAPH" desc="The paragraph that lets the user skip the warning.">
+        If you trust the source of this link and you understand the risks, you may continue to this
+      </message>
+
+      <message name="IDS_XSS_V1_PROCEED_PARAGRAPH_LINK" desc="The paragraph that lets the user skip the warning.">
+        <ph name="BEGIN_LINK">&lt;a href="#" id="proceed-link"&gt;</ph> website<ph name="END_LINK">&lt;/a&gt;</ph>.
+      </message>
+      <message name="IDS_XSS_V1_HEADING" desc="The heading at the top of the XSS Interstitial.">
+        Possibly Unsafe Link
+      </message>
+
+      <message name="IDS_XSS_V1_PRIMARY_PARAGRAPH" desc="The paragraph that indicates that the link clicked may be dangerous">
+        The link you clicked on might contain some harmful scripts which can be used to steal your information.
+      </message>
+
+      <message name="IDS_XSS_V1_EXPLANATION_PARAGRAPH_LINK" desc="The paragraph that explains the dangers of the link">
+        <ph name="BEGIN_LINK">&lt;a href="#" id="info-link"&gt;</ph>Cross Site Scripting (XSS) <ph name="END_LINK">&lt;/a&gt;</ph>
+      </message>
+      <message name="IDS_XSS_V1_EXPLANATION_PARAGRAPH" desc="The paragraph that explains the dangers of the link">
+        attacks are used by hackers to alter the functionality of a target website, often to steal your personal data or account credentials.
+      </message>
+  <!-- End of XSS strings. -->
+</grit-part>

@@ -1,0 +1,4 @@
+
+# Create xss_defender_vars.gni if xss_defender source files are not available
+exec_script("//build/xss_defender_init.py")
+import("//components/web-shield/xss_defender/xss_defender_vars.gni")
